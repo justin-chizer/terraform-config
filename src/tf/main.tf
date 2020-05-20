@@ -245,3 +245,41 @@ resource "azurerm_virtual_network_peering" "show" {
   remote_virtual_network_id = azurerm_virtual_network.hub.id
 }
 
+resource "azurerm_linux_virtual_machine_scale_set" "show" {
+  name                            = "show-vmss"
+  resource_group_name             = azurerm_resource_group.show.name
+  location                        = azurerm_resource_group.show.location
+  sku                             = "Standard_D2S_v3"
+  instances                       = 2
+  admin_username                  = "adminuser"
+  admin_password                  = "Password!23"
+  disable_password_authentication = false
+
+  #   admin_ssh_key {
+  #     username   = "adminuser"
+  #     public_key = file("~/.ssh/id_rsa.pub")
+  #   }
+
+  source_image_reference {
+    publisher = "Debian"
+    offer     = "debian-10"
+    sku       = "10"
+    version   = "latest"
+  }
+
+  os_disk {
+    storage_account_type = "Premium_LRS"
+    caching              = "ReadWrite"
+  }
+
+  network_interface {
+    name    = "show"
+    primary = true
+
+    ip_configuration {
+      name      = "internal"
+      primary   = true
+      subnet_id = azurerm_subnet.show.id
+    }
+  }
+}
