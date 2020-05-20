@@ -55,6 +55,10 @@ resource "azurerm_subnet" "core" {
   #     }
   #   }
 }
+resource "azurerm_subnet_network_security_group_association" "core" {
+  subnet_id                 = azurerm_subnet.core.id
+  network_security_group_id = azurerm_network_security_group.hub.id
+}
 
 resource "azurerm_subnet" "mgmt" {
   name                 = var.mgmt_subnet_name
@@ -70,6 +74,10 @@ resource "azurerm_subnet" "mgmt" {
   #       actions = ["Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"]
   #     }
   #   }
+}
+resource "azurerm_subnet_network_security_group_association" "mgmt" {
+  subnet_id                 = azurerm_subnet.mgmt.id
+  network_security_group_id = azurerm_network_security_group.hub.id
 }
 
 resource "azurerm_subnet" "bastion" {
@@ -101,3 +109,51 @@ resource "azurerm_bastion_host" "bastion" {
 }
 
 ################################################################
+# Create the Debian Core VM
+resource "azurerm_network_interface" "core" {
+  name                = "vm-nic"
+  location            = azurerm_resource_group.hub.location
+  resource_group_name = azurerm_resource_group.hub.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.core.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+
+
+resource "azurerm_linux_virtual_machine" "core" {
+  name                            = var.avid-core-vm
+  resource_group_name             = azurerm_resource_group.hub.name
+  location                        = azurerm_resource_group.hub.location
+  size                            = "Standard_D2S_v3" #Does not support acc networking
+  admin_username                  = "adminuser"
+  admin_password                  = "Password!23"
+  disable_password_authentication = false
+  network_interface_ids = [
+    azurerm_network_interface.core.id,
+  ]
+
+  # admin_ssh_key {
+  #   username = "adminuser"
+  #   public_key = file("~/.ssh/id_rsa.pub")
+  # }
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Premium_LRS"
+    disk_size_gb         = 128 # P10 Premium SSD. Should be P30 for prod
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  source_image_reference {
+    publisher = "Debian"
+    offer     = "debian-10"
+    sku       = "10"
+    version   = "latest"
+  }
+}

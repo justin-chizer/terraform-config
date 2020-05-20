@@ -22,6 +22,6 @@ variable "mgmt_subnet_name" {
 
 }
 
-# variable "" {
+variable "avid-core-vm" {
 
-# }
+}
