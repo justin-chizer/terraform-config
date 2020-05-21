@@ -21,11 +21,6 @@ jobs:
       with:
         terraform_version: 0.12.25
     
-    - name: path
-      run: |
-        pwd
-        cd ./src/tf
-        pwd
 
     - name: Terraform Init
       run: terraform init
