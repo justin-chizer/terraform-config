@@ -13,10 +13,10 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    
-    - name: Set dir
-      run: pwd
-      run: ls
+      with:
+        inlineScript: |
+          ls
+          pwd
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
