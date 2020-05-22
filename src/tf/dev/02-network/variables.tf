@@ -32,3 +32,7 @@ variable "subscription_id" {
 variable "tenant_id" {
 
 }
+
+variable "hub_vnet_name" {
+    
+}
