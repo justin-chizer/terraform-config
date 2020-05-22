@@ -1,3 +1,42 @@
+data "terraform_remote_state" "hub" {
+  backend = "azurerm"
+
+  config = {
+    resource_group_name  = "avid-hub"
+    storage_account_name = "chizerstorageaccount"
+    container_name       = "tfbackend"
+    key                  = "prod.terraform.tfstate"
+    subscription_id      = var.subscription_id
+    client_id            = var.client_id
+    client_secret        = var.client_secret
+    tenant_id            = var.tenant_id
+  }
+}
+data "azurerm_resource_group" "hub" {
+  name = "avid-hub"
+}
+
+data "terraform_remote_state" "core" {
+  backend = "azurerm"
+
+  config = {
+    resource_group_name  = "avid-hub"
+    storage_account_name = "chizerstorageaccount"
+    container_name       = "tfbackend"
+    key                  = "prodcore.terraform.tfstate"
+    subscription_id      = var.subscription_id
+    client_id            = var.client_id
+    client_secret        = var.client_secret
+    tenant_id            = var.tenant_id
+  }
+}
+
+data "azurerm_virtual_network" "core" {
+  name                = var.hub_vnet_name
+  resource_group_name = data.azurerm_resource_group.hub.name
+}
+
+
 resource "azurerm_resource_group" "show" {
   name     = var.show_rg_name
   location = var.show_region
@@ -62,8 +101,8 @@ resource "azurerm_subnet_network_security_group_association" "show" {
 # Peer the VNets
 resource "azurerm_virtual_network_peering" "hub" {
   name                      = "hubtoshow-1"
-  resource_group_name       = azurerm_resource_group.hub.name
-  virtual_network_name      = azurerm_virtual_network.hub.name
+  resource_group_name       = data.azurerm_resource_group.hub.name
+  virtual_network_name      = data.azurerm_virtual_network.core.name
   remote_virtual_network_id = azurerm_virtual_network.show.id
 }
 
@@ -71,5 +110,5 @@ resource "azurerm_virtual_network_peering" "show" {
   name                      = "show-1tohub"
   resource_group_name       = azurerm_resource_group.show.name
   virtual_network_name      = azurerm_virtual_network.show.name
-  remote_virtual_network_id = azurerm_virtual_network.hub.id
+  remote_virtual_network_id = data.azurerm_virtual_network.core.id
 }
