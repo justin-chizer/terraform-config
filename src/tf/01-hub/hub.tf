@@ -1,6 +1,5 @@
 data "azurerm_resource_group" "hub" {
   name     = "avid-core"
-  location = "westus2"
 }
 
 
