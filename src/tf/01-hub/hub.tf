@@ -1,5 +1,5 @@
 data "azurerm_resource_group" "hub" {
-  name = "avid-core"
+  name = "avid-hub"
 }
 
 

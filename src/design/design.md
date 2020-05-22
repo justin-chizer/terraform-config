@@ -1,17 +1,4 @@
 If present continue else create the core
-Draw up diagram and give lables
-
-
-A folder for acrchitecture 
-	high level design
-	Design.md put Assumptions here, Requirements. Blockers. Brain dump
-		Assumptions shows don't talk to each other
-		Requirements show in Europe and then move to LA. Active /Active Resiliency? HA? DR? GRS Storage of their data?
-		
-src folder
-	tf
-		core, nework, show infra
-
 
 ## Assumptions 
 
@@ -44,3 +31,4 @@ src folder
 
 - How to maintain multiple state files?
 - Will we extend existing infrastructure or manage it?
+- What happens when a pipeline fails and the lock on the state file is not released?
