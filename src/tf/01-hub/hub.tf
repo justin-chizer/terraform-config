@@ -1,19 +1,29 @@
-data "terraform_remote_state" "hub" {
-  backend = "azurerm"
+# data "terraform_remote_state" "hub" {
+#   backend = "azurerm"
 
-  config = {
-    resource_group_name  = "avid-hub"
-    storage_account_name = "chizerstorageaccount"
-    container_name       = "tfbackend"
-    key                  = "prod.terraform.tfstate"
-    subscription_id      = var.subscription_id
-    client_id            = var.client_id
-    client_secret        = var.client_secret
-    tenant_id            = var.tenant_id
-  }
-}
+#   config = {
+#     resource_group_name  = "avid-hub"
+#     storage_account_name = "chizerstorageaccount"
+#     container_name       = "tfbackend"
+#     key                  = "prod.terraform.tfstate"
+#     subscription_id      = var.subscription_id
+#     client_id            = var.client_id
+#     client_secret        = var.client_secret
+#     tenant_id            = var.tenant_id
+#   }
+# }
 data "azurerm_resource_group" "hub" {
   name = "avid-hub"
+}
+
+data "azurerm_key_vault" "hub" {
+  name                = "chizervault"
+  resource_group_name = "avid-hub"
+}
+
+data "azurerm_storage_account" "hub" {
+  name                = "chizerstorageaccount"
+  resource_group_name = "avid-hub"
 }
 
 
