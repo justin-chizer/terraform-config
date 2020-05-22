@@ -1,6 +1,6 @@
 data "azurerm_resource_group" "hub" {
-  name     = data.azurerm_resource_group.hub.name
-  location = data.azurerm_resource_group.hub.location
+  name     = "avid-core"
+  location = "westus2"
 }
 
 
