@@ -16,3 +16,15 @@ variable "subscription_id" {
 variable "tenant_id" {
 
 }
+
+variable "hub_rg_name" {
+
+}
+
+variable "hub_region" {
+
+}
+
+variable "hub_nsg_name" {
+
+}
