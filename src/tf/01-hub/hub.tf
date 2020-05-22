@@ -16,17 +16,6 @@ data "azurerm_resource_group" "hub" {
   name = "avid-hub"
 }
 
-data "azurerm_key_vault" "hub" {
-  name                = "chizervault"
-  resource_group_name = "avid-hub"
-}
-
-data "azurerm_storage_account" "hub" {
-  name                = "chizerstorageaccount"
-  resource_group_name = "avid-hub"
-}
-
-
 resource "azurerm_virtual_network" "hub" {
   name                = var.hub_vnet_name
   location            = data.azurerm_resource_group.hub.location
