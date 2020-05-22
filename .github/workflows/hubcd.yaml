@@ -37,7 +37,7 @@ jobs:
       run: terraform fmt -check -recursive
 
     - name: Terraform Validate
-      run: terraform validate
+      run: terraform validate -var=client_secret="${{ steps.myGetSecretAction.outputs.CLIENT-SECRET }}" -var=client_id="${{ steps.myGetSecretAction.outputs.CLIENT-ID }}" -var=subscription_id="${{ steps.myGetSecretAction.outputs.SUBSCRIPTION-ID }}" -var=tenant_id="${{ steps.myGetSecretAction.outputs.TENANT-ID }}"
 
     - name: Terraform Plan
       run: terraform plan -var=client_secret="${{ steps.myGetSecretAction.outputs.CLIENT-SECRET }}" -var=client_id="${{ steps.myGetSecretAction.outputs.CLIENT-ID }}" -var=subscription_id="${{ steps.myGetSecretAction.outputs.SUBSCRIPTION-ID }}" -var=tenant_id="${{ steps.myGetSecretAction.outputs.TENANT-ID }}"
