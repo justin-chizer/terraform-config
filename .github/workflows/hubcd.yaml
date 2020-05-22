@@ -1,0 +1,43 @@
+name: 'Terraform'
+
+on:
+  push:
+    branches:
+    - master
+defaults:
+  run:
+    working-directory: ./src/tf/01-hub
+
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - uses: Azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - uses: Azure/get-keyvault-secrets@v1.0
+      with:
+        keyvault: "chizervault"
+        secrets: 'CLIENT-ID, CLIENT-SECRET, SUBSCRIPTION-ID, TENANT-ID'
+      id: myGetSecretAction
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.12.25
+    
+
+    - name: Terraform Init
+      run: terraform init -backend-config=client_id="${{ steps.myGetSecretAction.outputs.CLIENT-ID  }}" -backend-config=client_secret="${{ steps.myGetSecretAction.outputs.CLIENT-SECRET  }}" -backend-config=tenant_id="${{ steps.myGetSecretAction.outputs.TENANT-ID  }}" -backend-config=subscription_id="${{ steps.myGetSecretAction.outputs.SUBSCRIPTION-ID  }}"
+
+    - name: Terraform Format
+      run: terraform fmt -check -recursive
+
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Plan
+      run: terraform plan -var=client_secret="${{ steps.myGetSecretAction.outputs.CLIENT-SECRET }}" -var=client_id="${{ steps.myGetSecretAction.outputs.CLIENT-ID }}" -var=subscription_id="${{ steps.myGetSecretAction.outputs.SUBSCRIPTION-ID }}" -var=tenant_id="${{ steps.myGetSecretAction.outputs.TENANT-ID }}"
