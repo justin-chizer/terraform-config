@@ -4,6 +4,7 @@ If present continue else create the core
 
 - For now, Greenfield
 - Currently ignoring imaging the VM
+- Using multiple State Files
 - 
 
 ## Requirements
@@ -29,6 +30,6 @@ If present continue else create the core
 
 ## Blockers
 
-- How to maintain multiple state files?
+- How to maintain multiple state files? 
 - Will we extend existing infrastructure or manage it?
 - What happens when a pipeline fails and the lock on the state file is not released?
