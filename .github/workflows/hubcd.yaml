@@ -6,7 +6,7 @@ on:
     - master
 defaults:
   run:
-    working-directory: ./src/tf/01-hub
+    working-directory: ./src/tf/dev/01-hub
 
 jobs:
   terraform:
