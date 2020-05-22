@@ -28,3 +28,7 @@ variable "hub_region" {
 variable "hub_nsg_name" {
 
 }
+
+variable "core_subnet_name" {
+
+}
