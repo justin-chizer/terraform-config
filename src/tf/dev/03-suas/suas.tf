@@ -51,15 +51,25 @@ data "terraform_remote_state" "network" {
   }
 }
 
-"azurerm_virtual_network" "show" {
+data "azurerm_virtual_network" "network" {
   name                = var.show_vnet_name
-  resource_group_name = data.azurerm_resource_group.hub.name
+  resource_group_name = data.azurerm_resource_group.network.name
+}
+
+data "azurerm_resource_group" "network" {
+  name = var.show_rg_name
+}
+
+data "azurerm_subnet" "network" {
+  name                 = var.show_subnet_name
+  virtual_network_name = data.azurerm_virtual_network.network.name
+  resource_group_name  = data.azurerm_resource_group.network.name
 }
 
 resource "azurerm_linux_virtual_machine_scale_set" "show" {
   name                            = "show-vmss"
-  resource_group_name             = azurerm_resource_group.show.name
-  location                        = azurerm_resource_group.show.location
+  resource_group_name             = data.azurerm_resource_group.network.name
+  location                        = data.azurerm_resource_group.network.location
   sku                             = "Standard_D2S_v3"
   instances                       = 2
   admin_username                  = "adminuser"
@@ -90,7 +100,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "show" {
     ip_configuration {
       name      = "internal"
       primary   = true
-      subnet_id = azurerm_subnet.show.id
+      subnet_id = data.azurerm_subnet.network.id
     }
   }
 }

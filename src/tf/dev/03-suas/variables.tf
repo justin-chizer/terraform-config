@@ -18,5 +18,13 @@ variable "hub_vnet_name" {
 }
 
 variable "show_vnet_name" {
-    
+
+}
+
+variable "show_rg_name" {
+
+}
+
+variable "show_subnet_name" {
+
 }

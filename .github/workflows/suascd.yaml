@@ -1,13 +1,12 @@
 name: 'Terraform'
 
 on:
-  #push:
-  pull_request:
+  push:
     branches:
     - master
 defaults:
   run:
-    working-directory: ./src/tf/dev/02-network
+    working-directory: ./src/tf/dev/03-suas
 
 jobs:
   terraform:
@@ -43,5 +42,5 @@ jobs:
     - name: Terraform Plan
       run: terraform plan -var-file='./../terraform.tfvars' -var=client_secret="${{ steps.myGetSecretAction.outputs.CLIENT-SECRET }}" -var=client_id="${{ steps.myGetSecretAction.outputs.CLIENT-ID }}" -var=subscription_id="${{ steps.myGetSecretAction.outputs.SUBSCRIPTION-ID }}" -var=tenant_id="${{ steps.myGetSecretAction.outputs.TENANT-ID }}"
 
-    - name: Terraform Apply
-      run: terraform apply -auto-approve -var-file='./../terraform.tfvars' -var=client_secret="${{ steps.myGetSecretAction.outputs.CLIENT-SECRET }}" -var=client_id="${{ steps.myGetSecretAction.outputs.CLIENT-ID }}" -var=subscription_id="${{ steps.myGetSecretAction.outputs.SUBSCRIPTION-ID }}" -var=tenant_id="${{ steps.myGetSecretAction.outputs.TENANT-ID }}"
+    # - name: Terraform Apply
+    #   run: terraform apply -auto-approve -var-file='./../terraform.tfvars' -var=client_secret="${{ steps.myGetSecretAction.outputs.CLIENT-SECRET }}" -var=client_id="${{ steps.myGetSecretAction.outputs.CLIENT-ID }}" -var=subscription_id="${{ steps.myGetSecretAction.outputs.SUBSCRIPTION-ID }}" -var=tenant_id="${{ steps.myGetSecretAction.outputs.TENANT-ID }}"
