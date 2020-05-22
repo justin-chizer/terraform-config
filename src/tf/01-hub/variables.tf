@@ -32,3 +32,7 @@ variable "hub_nsg_name" {
 variable "core_subnet_name" {
 
 }
+
+variable "avid-core-vm" {
+
+}
