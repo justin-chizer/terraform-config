@@ -3,10 +3,10 @@
 # client_secret   = 
 # tenant_id       = 
 
-hub_rg_name      = "avid-hub"
+hub_rg_name      = "avid-core"
 hub_region       = "westus2"
-hub_nsg_name     = "avid-hub-nsg"
-hub_vnet_name    = "avid-hub-vnet"
+hub_nsg_name     = "avid-core-nsg"
+hub_vnet_name    = "avid-core-vnet"
 core_subnet_name = "core-subnet"
 mgmt_subnet_name = "mgmt-subnet"
 avid-core-vm     = "avid-core-vm"
